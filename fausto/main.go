@@ -2,7 +2,8 @@ package main
 
 import (
 	"github.com/Gustrb/text-processing/fausto/plugins"
-    "github.com/gin-gonic/gin"
+	"github.com/Gustrb/text-processing/fausto/router"
+	"github.com/gin-gonic/gin"
 )
 
 func main() {
@@ -16,6 +17,8 @@ func main() {
             "message": "Pong :)",
         })
     })
+
+    r.POST("/file", router.HandleCreateFile)
 
     r.Run()
 }
