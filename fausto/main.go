@@ -1,6 +1,8 @@
 package main
 
 import (
+	"fmt"
+
 	"github.com/Gustrb/text-processing/fausto/plugins"
 	"github.com/Gustrb/text-processing/fausto/router"
 	"github.com/gin-gonic/gin"
@@ -19,7 +21,10 @@ func main() {
     })
 
     r.POST("/file", router.HandleCreateFile)
-
-    r.Run()
+    
+    // TODO: Get the value from env variables
+    host := "localhost"
+    port := "8080"
+    r.Run(fmt.Sprintf("%s:%s", host, port))
 }
 
