@@ -40,7 +40,5 @@ func main() {
 	r.POST("/file", router.HandleCreateFile)
 
 	// TODO: Get the value from env variables
-	host := "localhost"
-	port := "8080"
-	r.Run(fmt.Sprintf("%s:%s", host, port))
+	r.Run(fmt.Sprintf("%s:%s", config.Server.Host, config.Server.Port))
 }
