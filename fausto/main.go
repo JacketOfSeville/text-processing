@@ -39,6 +39,5 @@ func main() {
 
 	r.POST("/file", router.HandleCreateFile)
 
-	// TODO: Get the value from env variables
 	r.Run(fmt.Sprintf("%s:%s", config.Server.Host, config.Server.Port))
 }
