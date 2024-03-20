@@ -6,4 +6,4 @@ The idea of it is to be a microkernel at the center, that will recieve text data
 
 ### Architecture
 
-![alt text](http://github.com/Gustrb/text-processing/blob/main/architecture.png)
+![alt text](http://github.com/Gustrb/text-processing/blob/main/architecture.png?raw=true)
