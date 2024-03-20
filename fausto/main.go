@@ -5,7 +5,6 @@ import (
 	"log"
 
 	"github.com/Gustrb/text-processing/fausto/config"
-	"github.com/Gustrb/text-processing/fausto/plugins"
 	"github.com/Gustrb/text-processing/fausto/router"
 	"github.com/Gustrb/text-processing/fausto/store"
 	"github.com/gin-gonic/gin"
@@ -25,10 +24,6 @@ func main() {
 	log.Println("Connected to the database")
 
 	defer store.Disconnect()
-
-	pluginList := plugins.DiscoverPlugins()
-
-	plugins.InitializePlugins(pluginList)
 
 	r := gin.Default()
 	r.GET("/ping", func(c *gin.Context) {

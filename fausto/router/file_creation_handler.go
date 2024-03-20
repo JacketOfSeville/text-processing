@@ -3,20 +3,25 @@ package router
 import (
 	"net/http"
 
+	"github.com/Gustrb/text-processing/fausto/plugins"
 	"github.com/gin-gonic/gin"
 )
 
 type CreateFileRequest struct {
-    Content string `json:"content"`
+	Content string `json:"content"`
 }
 
 func HandleCreateFile(c *gin.Context) {
-    var requestData CreateFileRequest
-    
-    if err := c.BindJSON(&requestData); err != nil {
-        c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-        return
-    }
+	var requestData CreateFileRequest
 
-    c.JSON(200, gin.H{ "message": requestData.Content })
+	pluginList := plugins.DiscoverPlugins()
+
+	if err := c.BindJSON(&requestData); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	plugins.RunPlugins(pluginList, plugins.PluginInputData{Content: requestData.Content})
+
+	c.JSON(200, gin.H{"message": requestData.Content})
 }
