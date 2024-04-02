@@ -13,9 +13,7 @@ type Plugin interface {
 }
 
 func DiscoverPlugins() []Plugin {
-	plugins := []Plugin{
-		&WordCountPlugin{},
-	}
+	plugins := []Plugin{}
 
 	return plugins
 }
