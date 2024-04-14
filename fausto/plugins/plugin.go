@@ -2,10 +2,13 @@ package plugins
 
 import (
 	"sync"
+
+	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 type PluginInputData struct {
 	Content string
+	Id      primitive.ObjectID
 }
 
 type Plugin interface {
@@ -13,7 +16,9 @@ type Plugin interface {
 }
 
 func DiscoverPlugins() []Plugin {
-	plugins := []Plugin{}
+	plugins := []Plugin{
+		&WordCountPlugin{},
+	}
 
 	return plugins
 }

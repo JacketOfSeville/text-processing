@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/Gustrb/text-processing/fausto/plugins"
+	"github.com/Gustrb/text-processing/fausto/store"
 	"github.com/gin-gonic/gin"
 )
 
@@ -21,7 +22,14 @@ func HandleCreateFile(c *gin.Context) {
 		return
 	}
 
-	plugins.RunPlugins(pluginList, plugins.PluginInputData{Content: requestData.Content})
+	data := &store.CreateFileDTO{Content: requestData.Content}
 
-	c.JSON(200, gin.H{"message": requestData.Content})
+	if err := store.GetStore().FileStore().CreateFile(data); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	plugins.RunPlugins(pluginList, plugins.PluginInputData{Content: requestData.Content, Id: data.Id})
+
+	c.JSON(200, gin.H{"file": data})
 }

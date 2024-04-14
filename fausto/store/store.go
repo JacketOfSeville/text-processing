@@ -19,7 +19,11 @@ const (
 )
 
 type DataStore interface {
-	FileStore() *FileStore
+	FileStore() FileStore
+}
+
+type DataStoreImpl struct {
+	database *mongo.Database
 }
 
 type CreateFileDTO struct {
@@ -29,7 +33,7 @@ type CreateFileDTO struct {
 }
 
 type FileStore interface {
-	createFile(*CreateFileDTO) error
+	CreateFile(*CreateFileDTO) error
 }
 
 func Initialize(uri string) error {
@@ -49,7 +53,14 @@ func Initialize(uri string) error {
 	}
 
 	_client = client
+
+	_store = &DataStoreImpl{database: _client.Database("fausto")}
+
 	return nil
+}
+
+func (d *DataStoreImpl) FileStore() FileStore {
+	return &FileStoreImpl{database: d.database}
 }
 
 func Disconnect() error {
