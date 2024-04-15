@@ -29,7 +29,7 @@ func HandleCreateFile(c *gin.Context) {
 		return
 	}
 
-	plugins.RunPlugins(pluginList, plugins.PluginInputData{Content: requestData.Content})
+	plugins.RunPlugins(pluginList, plugins.PluginInputData{Content: requestData.Content, Id: data.Id})
 
 	c.JSON(200, gin.H{"file": data})
 }
