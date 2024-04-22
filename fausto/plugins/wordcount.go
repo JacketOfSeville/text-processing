@@ -1,11 +1,13 @@
 package plugins
 
 import (
+	// "context"
 	"encoding/json"
 	"fmt"
 
 	"github.com/Gustrb/text-processing/fausto/utils"
 	"go.mongodb.org/mongo-driver/bson/primitive"
+	// "go.mongodb.org/mongo-driver/mongo"
 )
 
 type WordCountPlugin struct{}
@@ -15,6 +17,32 @@ type CountReturnDTO struct {
 	Id        primitive.ObjectID `json:"textId" bson:"textId"`
 	WordCount int                `json:"wordCount" bson:"wordCount"`
 }
+
+/* Database and storage related functions
+// Primary tests succeeded but did still need
+// to find a simpler way to do this
+
+type DataStore interface {
+	WordStore() WordStore
+}
+
+type WordStore interface {
+	CreateWord(*CountReturnDTO) error
+}
+
+type WordStoreImpl struct {
+	database *mongo.Database
+}
+
+func (d *WordStoreImpl) WordStore() WordStore {
+	return &WordStoreImpl{database: d.database}
+}
+
+func (f *WordStoreImpl) CreateWord(dto *CountReturnDTO) error {
+	_, err := f.database.Collection("words").InsertOne(context.TODO(), dto)
+	return err
+}
+*/
 
 // Word counting function
 func countWord(data string) int {
@@ -35,21 +63,19 @@ func countWord(data string) int {
 // Recieve: id, text, createdAt
 func (*WordCountPlugin) Execute(input PluginInputData) {
 	count := countWord(input.Content)
-	rawJson := CountReturnDTO{
-		Id:        input.Id,
+	rawResult := CountReturnDTO{
+		Id:        input.Id, // ID equals to the original text's ID in the DB
 		WordCount: count,
 	}
 
 	// Marshal the struct into JSON
-	jsonResult, err := json.Marshal(rawJson)
+	jsonResult, err := json.Marshal(rawResult)
 	if err != nil {
 		fmt.Println("Erro ao criar JSON:", err)
 		return
 	}
+	result := string(jsonResult) // Convert JSON data to a string
+	fmt.Println(result)          // TODO: Do something with the generated JSON
 
-	// Convert JSON data to a string
-	result := string(jsonResult)
-
-	// TODO: Do something with the generated JSON
-	fmt.Println(result)
+	// TODO: Store said result in the database
 }
