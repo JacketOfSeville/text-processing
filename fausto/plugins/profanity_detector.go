@@ -17,6 +17,10 @@ type ProfanityDetector struct {
 	badWords map[string]bool
 }
 
+func ProfanityDetectorNew() Plugin {
+	return ProfanityDetector{badWords: make(map[string]bool)}
+}
+
 func (p ProfanityDetector) Init() {
 	file, err := os.Open(ProfanityListPath)
 

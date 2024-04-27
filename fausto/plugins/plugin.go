@@ -7,7 +7,7 @@ import (
 )
 
 var pluginList = []Plugin{
-	ProfanityDetector{badWords: make(map[string]bool)},
+	ProfanityDetectorNew(),
 }
 
 var pluginsInitialized bool = false
