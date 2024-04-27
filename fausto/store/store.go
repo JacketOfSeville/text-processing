@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/Gustrb/text-processing/fausto/utils"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
@@ -50,8 +51,8 @@ type ProfanityInText struct {
 }
 
 type CreateProfanityDTO struct {
-	TextID      primitive.ObjectID `json:"text_id"`
-	Profanities []ProfanityInText  `json:"profanities"`
+	TextID      primitive.ObjectID      `json:"text_id"`
+	Profanities []utils.OccurenceInText `json:"profanities"`
 }
 
 type ProfanityStore interface {

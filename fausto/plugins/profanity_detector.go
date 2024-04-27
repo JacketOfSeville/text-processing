@@ -51,26 +51,9 @@ func (p ProfanityDetector) Execute(data PluginInputData) {
 	log.Printf("ProfanityDetector plugin executing on content: %s", data.Content)
 
 	badWordsMetadata := store.CreateProfanityDTO{TextID: data.Id}
-	lexer := utils.NewLexer(data.Content)
-
-	var token utils.Token
-	for token.Type != utils.TokEOF {
-		token = lexer.NextToken()
-
-		if token.Type == utils.TokWord {
-			if p.badWords[token.Value] {
-				badWordsMetadata.Profanities = append(badWordsMetadata.Profanities, store.ProfanityInText{
-					Line:   token.Line,
-					Column: token.Column - len(token.Value),
-					End: store.Location{
-						Line: token.Line,
-						Col:  token.Column,
-					},
-					Word: token.Value,
-				})
-			}
-		}
-	}
+	badWordsMetadata.Profanities = utils.FindOccurencesOf(data.Content, func(word string) bool {
+		return p.badWords[word]
+	})
 
 	if len(badWordsMetadata.Profanities) > 0 {
 		err := store.GetStore().ProfanityStore().CreateProfanity(&badWordsMetadata)
