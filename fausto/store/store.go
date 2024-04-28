@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/Gustrb/text-processing/fausto/utils"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
@@ -20,6 +21,7 @@ const (
 
 type DataStore interface {
 	FileStore() FileStore
+	ProfanityStore() ProfanityStore
 }
 
 type DataStoreImpl struct {
@@ -34,6 +36,27 @@ type CreateFileDTO struct {
 
 type FileStore interface {
 	CreateFile(*CreateFileDTO) error
+}
+
+type Location struct {
+	Line int `json:"line"`
+	Col  int `json:"column"`
+}
+
+type ProfanityInText struct {
+	Line   int      `json:"line"`
+	Column int      `json:"column"`
+	End    Location `json:"end"`
+	Word   string   `json:"word"`
+}
+
+type CreateProfanityDTO struct {
+	TextID      primitive.ObjectID      `json:"text_id"`
+	Profanities []utils.OccurenceInText `json:"profanities"`
+}
+
+type ProfanityStore interface {
+	CreateProfanity(*CreateProfanityDTO) error
 }
 
 func Initialize(uri string) error {
@@ -61,6 +84,10 @@ func Initialize(uri string) error {
 
 func (d *DataStoreImpl) FileStore() FileStore {
 	return &FileStoreImpl{database: d.database}
+}
+
+func (d *DataStoreImpl) ProfanityStore() ProfanityStore {
+	return &ProfanityStoreImpl{database: d.database}
 }
 
 func Disconnect() error {
