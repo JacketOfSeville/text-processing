@@ -8,6 +8,7 @@ import (
 
 var pluginList = []Plugin{
 	ProfanityDetectorNew(),
+	SpellCheckerNew(),
 }
 
 var pluginsInitialized bool = false

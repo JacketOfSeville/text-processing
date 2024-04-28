@@ -26,6 +26,7 @@ func (p ProfanityDetector) Init() {
 
 	if err != nil {
 		log.Printf("Error loading ProfanityDetctor plugin: %v", err)
+		return
 	}
 
 	defer file.Close()
@@ -42,6 +43,7 @@ func (p ProfanityDetector) Init() {
 
 	if err := scanner.Err(); err != nil {
 		log.Printf("Error scanning ProfanityDetector plugin: %v", err)
+		return
 	}
 
 	log.Printf("ProfanityDetector plugin initialized with %d bad words", len(p.badWords))

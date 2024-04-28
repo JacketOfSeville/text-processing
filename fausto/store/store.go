@@ -22,6 +22,7 @@ const (
 type DataStore interface {
 	FileStore() FileStore
 	ProfanityStore() ProfanityStore
+	SpellCheckerStore() SpellCheckerStore
 }
 
 type DataStoreImpl struct {
@@ -59,6 +60,15 @@ type ProfanityStore interface {
 	CreateProfanity(*CreateProfanityDTO) error
 }
 
+type CreateSpellCheckerMetaDTO struct {
+	TextID         primitive.ObjectID      `json:"text_id"`
+	SpellingErrors []utils.OccurenceInText `json:"spelling_errors"`
+}
+
+type SpellCheckerStore interface {
+	CreateSpellCheckerMetadata(*CreateSpellCheckerMetaDTO) error
+}
+
 func Initialize(uri string) error {
 	ctx := context.Background()
 
@@ -88,6 +98,10 @@ func (d *DataStoreImpl) FileStore() FileStore {
 
 func (d *DataStoreImpl) ProfanityStore() ProfanityStore {
 	return &ProfanityStoreImpl{database: d.database}
+}
+
+func (d *DataStoreImpl) SpellCheckerStore() SpellCheckerStore {
+	return &SpellCheckerStoreImpl{database: d.database}
 }
 
 func Disconnect() error {
