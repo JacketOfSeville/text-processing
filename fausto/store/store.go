@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/Gustrb/text-processing/fausto/utils"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
@@ -19,7 +20,13 @@ const (
 )
 
 type DataStore interface {
-	FileStore() *FileStore
+	FileStore() FileStore
+	ProfanityStore() ProfanityStore
+	SpellCheckerStore() SpellCheckerStore
+}
+
+type DataStoreImpl struct {
+	database *mongo.Database
 }
 
 type CreateFileDTO struct {
@@ -29,7 +36,37 @@ type CreateFileDTO struct {
 }
 
 type FileStore interface {
-	createFile(*CreateFileDTO) error
+	CreateFile(*CreateFileDTO) error
+}
+
+type Location struct {
+	Line int `json:"line"`
+	Col  int `json:"column"`
+}
+
+type ProfanityInText struct {
+	Line   int      `json:"line"`
+	Column int      `json:"column"`
+	End    Location `json:"end"`
+	Word   string   `json:"word"`
+}
+
+type CreateProfanityDTO struct {
+	TextID      primitive.ObjectID      `json:"text_id"`
+	Profanities []utils.OccurenceInText `json:"profanities"`
+}
+
+type ProfanityStore interface {
+	CreateProfanity(*CreateProfanityDTO) error
+}
+
+type CreateSpellCheckerMetaDTO struct {
+	TextID         primitive.ObjectID      `json:"text_id"`
+	SpellingErrors []utils.OccurenceInText `json:"spelling_errors"`
+}
+
+type SpellCheckerStore interface {
+	CreateSpellCheckerMetadata(*CreateSpellCheckerMetaDTO) error
 }
 
 func Initialize(uri string) error {
@@ -49,7 +86,22 @@ func Initialize(uri string) error {
 	}
 
 	_client = client
+
+	_store = &DataStoreImpl{database: _client.Database("fausto")}
+
 	return nil
+}
+
+func (d *DataStoreImpl) FileStore() FileStore {
+	return &FileStoreImpl{database: d.database}
+}
+
+func (d *DataStoreImpl) ProfanityStore() ProfanityStore {
+	return &ProfanityStoreImpl{database: d.database}
+}
+
+func (d *DataStoreImpl) SpellCheckerStore() SpellCheckerStore {
+	return &SpellCheckerStoreImpl{database: d.database}
 }
 
 func Disconnect() error {
