@@ -10,6 +10,7 @@ import (
 
 type CreateFileRequest struct {
 	Content string `json:"content"`
+	Name    string `json:"name"`
 }
 
 func HandleCreateFile(c *gin.Context) {
@@ -20,7 +21,7 @@ func HandleCreateFile(c *gin.Context) {
 		return
 	}
 
-	data := &store.CreateFileDTO{Content: requestData.Content}
+	data := &store.CreateFileDTO{Content: requestData.Content, Name: requestData.Name}
 
 	if err := store.GetStore().FileStore().CreateFile(data); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
