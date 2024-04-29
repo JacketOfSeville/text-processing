@@ -79,3 +79,30 @@ func TestItCanCountTheWordsOfASentence(t *testing.T) {
 		t.Errorf("Expected 13 words, got %d", words)
 	}
 }
+
+func TestItCanCountLinesAndColumns(t *testing.T) {
+	sentence := "hello\n\tworld\n\t\t!"
+	lexer := utils.NewLexer(sentence)
+
+	tokens := []utils.Token{}
+	for {
+		token := lexer.NextToken()
+		tokens = append(tokens, token)
+
+		if token.Type == utils.TokEOF {
+			break
+		}
+	}
+
+	if tokens[0].Line != 0 || tokens[0].Column != 5 {
+		t.Errorf("Expected line 0, column 0, got %d, %d", tokens[0].Line, tokens[0].Column)
+	}
+
+	if tokens[1].Line != 1 || tokens[1].Column != 10 {
+		t.Errorf("Expected line 1, column 0, got %d, %d", tokens[1].Line, tokens[1].Column)
+	}
+
+	if tokens[2].Line != 2 || tokens[2].Column != 9 {
+		t.Errorf("Expected line 2, column 1, got %d, %d", tokens[2].Line, tokens[2].Column)
+	}
+}
