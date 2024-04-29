@@ -9,6 +9,7 @@ import (
 var pluginList = []Plugin{
 	ProfanityDetectorNew(),
 	SpellCheckerNew(),
+	WordCountNew(),
 }
 
 var pluginsInitialized bool = false

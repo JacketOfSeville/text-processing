@@ -23,6 +23,7 @@ type DataStore interface {
 	FileStore() FileStore
 	ProfanityStore() ProfanityStore
 	SpellCheckerStore() SpellCheckerStore
+	WordCountStore() WordCountStore
 }
 
 type DataStoreImpl struct {
@@ -69,6 +70,15 @@ type SpellCheckerStore interface {
 	CreateSpellCheckerMetadata(*CreateSpellCheckerMetaDTO) error
 }
 
+type CreateWordCountDTO struct {
+	Id        primitive.ObjectID `json:"id" bson:"_id"`
+	WordCount int                `json:"wordCount" bson:"WordCount"`
+}
+
+type WordCountStore interface {
+	CreateWordCountMetadata(*CreateWordCountDTO) error
+}
+
 func Initialize(uri string) error {
 	ctx := context.Background()
 
@@ -94,6 +104,10 @@ func Initialize(uri string) error {
 
 func (d *DataStoreImpl) FileStore() FileStore {
 	return &FileStoreImpl{database: d.database}
+}
+
+func (d *DataStoreImpl) WordCountStore() WordCountStore {
+	return &WordCountStoreImpl{database: d.database}
 }
 
 func (d *DataStoreImpl) ProfanityStore() ProfanityStore {
