@@ -47,7 +47,7 @@ func (s SpellChecker) Init() {
 }
 
 func (s SpellChecker) Execute(data PluginInputData) {
-	log.Println("Running SpellChecker plugin")
+	log.Printf("Running SpellChecker plugin on file: %s\n", data.Id.Hex())
 
 	spellCheckingMetadata := store.CreateSpellCheckerMetaDTO{TextID: data.Id}
 	spellCheckingMetadata.SpellingErrors = utils.FindOccurencesOf(data.Content, func(word string) bool {

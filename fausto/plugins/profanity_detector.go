@@ -50,7 +50,7 @@ func (p ProfanityDetector) Init() {
 }
 
 func (p ProfanityDetector) Execute(data PluginInputData) {
-	log.Printf("ProfanityDetector plugin executing on content: %s", data.Content)
+	log.Printf("ProfanityDetector plugin executing on file: %s\n", data.Id.Hex())
 
 	badWordsMetadata := store.CreateProfanityDTO{TextID: data.Id}
 	badWordsMetadata.Profanities = utils.FindOccurencesOf(data.Content, func(word string) bool {
