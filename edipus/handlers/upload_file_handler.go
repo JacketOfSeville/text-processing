@@ -14,7 +14,7 @@ import (
 )
 
 const (
-	FaustoURL = "http://0.0.0.0:8080"
+	FaustoURL = "http://fausto:8080"
 )
 
 type FaustoRequest struct {
