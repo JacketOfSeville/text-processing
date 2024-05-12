@@ -1,14 +1,53 @@
 <html>
     <head>
-        <title>Edipus</title>
-        <style></style>
+        <title>File Upload</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                max-width: 500px;
+                margin: 0 auto;
+                padding: 20px;
+                text-align: center;
+
+                background-color: #ffffff;
+                opacity: 0.8;
+                background-image:  repeating-radial-gradient( circle at 0 0, transparent 0, #ffffff 10px ), repeating-linear-gradient( #eeeeee55, #eeeeee );
+            }
+            form {
+                margin-top: 20px;
+            }
+            label {
+                display: block;
+                margin-bottom: 10px;
+            }
+            input[type="file"] {
+                padding: 5px;
+            }
+            input[type="submit"] {
+                background-color: #4CAF50;
+                border: none;
+                border-radius: 5px;
+                color: white;
+                cursor: pointer;
+                font-size: 1em;
+                font-weight: bold;
+                padding: 7px 14px;
+            }
+            input[type="submit"]:hover {
+                background-color: #3E8E41;
+            }
+        </style>
     </head>
     <body>
+        <h1>Upload de Arquivo de Texto</h1>
         <form action="files/upload" method="post" enctype="multipart/form-data">
-            <input type="file" name="file" id="file" />
-            <input type="submit" value="Upload" />
+            <label for="file">Formatos suportados (.docx, .txt)</label>
+            <input type="file" name="file" id="file" required>
+            <br />
+            <input type="submit" value="Upload">
         </form>
     </body>
 
-    <script></script>
+    <script>
+    </script>
 </html>
